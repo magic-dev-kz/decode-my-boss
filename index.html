@@ -2432,10 +2432,34 @@ renderHistory();
 
 renderHistory();
 
-/* ── Copy Decoded (v4) ── */
+/* ── Copy Decoded (v4, v16: copy entire formatted result) ── */
 copyBtn.addEventListener('click',function(){
-if(!lastResult||!lastResult.translation||!lastResult.translation.length)return;
-const text=lastResult.translation.map(t=>t.decoded).join('\n\n');
+if(!lastResult)return;
+var parts=[];
+// Translation
+if(lastResult.translation&&lastResult.translation.length){
+parts.push('DECODED TRANSLATION');
+parts.push(lastResult.translation.map(function(t,i){
+var line=(i+1)+'. '+t.decoded;
+if(t.tone)line+=' ['+t.tone+']';
+return line;
+}).join('\n'));
+}
+// Red flags
+if(lastResult.redFlags&&lastResult.redFlags.length){
+parts.push('\nRED FLAGS');
+parts.push(lastResult.redFlags.map(function(f,i){return(i+1)+'. '+f;}).join('\n'));
+}
+// Toxicity
+if(lastResult.toxicityScore!==undefined){
+parts.push('\nTOXICITY SCORE: '+lastResult.toxicityScore+'/10');
+}
+// Playbook
+if(lastResult.playbook&&lastResult.playbook.length){
+parts.push('\nPLAYBOOK');
+parts.push(lastResult.playbook.map(function(p,i){return(i+1)+'. '+p;}).join('\n'));
+}
+var text=parts.join('\n');
 if(navigator.clipboard&&navigator.clipboard.writeText){
 navigator.clipboard.writeText(text).then(()=>showCopied()).catch(()=>fallbackCopy(text));
 }else{fallbackCopy(text)}

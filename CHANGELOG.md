@@ -1,5 +1,9 @@
 # Decode My Boss — Changelog
 
+## v16.0 (2026-03-29) — Full Result Copy
+
+- **Copy Entire Result**: Copy button now copies full formatted decode (translation, red flags, toxicity score, playbook)
+- SW cache bumped to `decode-my-boss-v16.0`
 ## v15.0 (2026-03-29) — AI Confidence Meter
 
 Feature update by Mario.
