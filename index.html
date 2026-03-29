@@ -955,21 +955,9 @@ header p{
   margin-top:6px;font-weight:500;
 }
 
-.openclaw-footer {
-  text-align: center;
-  padding: 24px 16px;
-  margin-top: 32px;
-}
-.openclaw-footer a {
-  font-size: 0.8rem;
-  color: var(--text-muted, #888);
-  text-decoration: none;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-.openclaw-footer a:hover {
-  opacity: 1;
-}
+.oc-footer{text-align:center;padding:20px 16px 24px;margin-top:24px}
+.oc-footer a{font-size:.78rem;color:var(--text-muted,var(--text-secondary,#888));text-decoration:none;opacity:.6;transition:opacity .2s}
+.oc-footer a:hover{opacity:1}
 /* Feedback Widget */
 .feedback-widget {
   text-align: center; padding: 24px 16px; margin-top: 32px;
@@ -2001,8 +1989,6 @@ if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch
 
 })();
 </script>
-<div class="openclaw-footer">
-  <a href="https://magic-dev-kz.github.io/openclaw/" target="_blank" rel="noopener">More free tools → OpenClaw</a>
-</div>
+<div class="oc-footer"><a href="https://magic-dev-kz.github.io/openclaw/" target="_blank" rel="noopener">More free tools → OpenClaw</a></div>
 </body>
 </html>
