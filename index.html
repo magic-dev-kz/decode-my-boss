@@ -34,6 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -56,10 +57,14 @@
   --text-sec:#9ca3af;
   --text-muted:#9ca3af;
   --radius:14px;
-  --mono:'Courier New',Courier,monospace;
+  --mono:'JetBrains Mono','Courier New',Courier,monospace;
   --glass-bg:rgba(22,33,56,.55);
   --glass-border:rgba(255,255,255,.12);
   --glass-blur:16px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.2), 0 1px 2px rgba(0,0,0,.12);
+  --shadow-md:0 4px 16px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.15);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.18);
+  --shadow-xl:0 20px 60px rgba(0,0,0,.5), 0 8px 24px rgba(0,0,0,.25);
 }
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
@@ -184,7 +189,7 @@ header p{
   border:1px solid var(--glass-border);
   border-radius:var(--radius);
   padding:10px;z-index:50;min-width:220px;
-  box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 1px rgba(255,255,255,.1) inset;
+  box-shadow:var(--shadow-xl),0 0 1px rgba(255,255,255,.1) inset;
   animation:scaleIn .2s ease;
 }
 .settings-dd.open{display:block}
@@ -223,7 +228,7 @@ header p{
   border-radius:var(--radius);
   padding:28px;
   margin-top:20px;
-  box-shadow:0 8px 32px rgba(0,0,0,.3),0 0 1px rgba(255,255,255,.05) inset;
+  box-shadow:var(--shadow-lg),0 0 1px rgba(255,255,255,.05) inset;
 }
 .setup-card h2{font-size:1.15rem;margin-bottom:14px;color:var(--accent);font-weight:700}
 
@@ -298,7 +303,7 @@ header p{
   border-radius:var(--radius);
   padding:22px;
   margin-top:14px;
-  box-shadow:0 8px 32px rgba(0,0,0,.3),0 0 1px rgba(255,255,255,.05) inset;
+  box-shadow:var(--shadow-lg),0 0 1px rgba(255,255,255,.05) inset;
 }
 
 .context-row{display:flex;gap:10px;align-items:center;margin-bottom:14px}
@@ -358,7 +363,7 @@ header p{
   transition:left .5s ease;
 }
 .decode-btn:hover:not(:disabled)::before{left:100%}
-.decode-btn:disabled{opacity:.3;cursor:not-allowed;box-shadow:none}
+.decode-btn:disabled{opacity:.6;cursor:not-allowed;box-shadow:none}
 .decode-btn:hover:not(:disabled){
   transform:translateY(-2px);
   box-shadow:0 8px 32px rgba(var(--accent-rgb),.45);
@@ -469,7 +474,7 @@ header p{
   border-radius:var(--radius);
   padding:22px;
   margin-bottom:16px;
-  box-shadow:0 8px 32px rgba(0,0,0,.25),0 0 1px rgba(255,255,255,.05) inset;
+  box-shadow:var(--shadow-lg),0 0 1px rgba(255,255,255,.05) inset;
   animation:fadeInUp .5s ease backwards;
   position:relative;
   overflow:hidden;
@@ -716,7 +721,7 @@ header p{
   border-radius:var(--radius);
   padding:28px;
   max-width:420px;width:92%;max-height:80vh;overflow-y:auto;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  box-shadow:var(--shadow-xl);
   animation:scaleIn .25s ease;
 }
 .modal-content h3{margin-bottom:14px;color:var(--accent);font-weight:700}
@@ -786,15 +791,15 @@ header p{
 
 /* -- Mobile polish -- */
 @media(max-width:600px){
-  .container{padding:12px 14px}
+  .container{padding:16px 16px}
   header h1{font-size:1.4rem}
-  .setup-card,.input-card{padding:18px}
+  .setup-card,.input-card{padding:20px}
   .tox-breakdown{grid-template-columns:1fr}
   .result-header{flex-direction:column;gap:10px;align-items:flex-start}
   .result-actions{width:100%}
   .result-actions button{flex:1;padding:11px 12px}
   .tox-number{font-size:2.2rem}
-  .result-block{padding:18px}
+  .result-block{padding:20px}
   .decode-btn{padding:14px;font-size:.95rem}
   .msg-textarea{min-height:140px}
   .loading-wrap{padding:60px 16px}
@@ -865,7 +870,7 @@ header p{
   border-radius:var(--radius);
   padding:22px;
   margin-top:16px;
-  box-shadow:0 8px 32px rgba(0,0,0,.25),0 0 1px rgba(255,255,255,.05) inset;
+  box-shadow:var(--shadow-lg),0 0 1px rgba(255,255,255,.05) inset;
   animation:fadeInUp .4s ease;
   position:relative;overflow:hidden;
 }
@@ -986,7 +991,7 @@ header p{
 <div class="container">
 <header>
 <h1><span class="icon">&#128270;</span> Decode My Boss</h1>
-<p>AI-powered corporate message decoder</p>
+<p>Paste what your boss wrote. See what they really meant.</p>
 <button class="gear-btn" id="gearBtn" aria-label="Settings" title="Settings" style="display:none">&#9881;</button>
 <div class="settings-dd" id="settingsDd" role="menu">
 <div class="prov-label">Provider</div>
@@ -1260,6 +1265,7 @@ if(msg.length<10)return;
 const ctx=contextSel.value;
 apiKey=lsGet('dmb_key_'+currentProvider)||'';
 if(!apiKey){showSection('sec-setup');return}
+decodeBtn.disabled=true;
 showSection('sec-loading');
 hideFeedbackWidget();
 startDecryptAnim();
@@ -1294,6 +1300,7 @@ const ie=$('inlineError');ie.textContent=errMsg;ie.style.display='block';
 stopDecryptAnim();
 stopLoadBar();
 shareBtn.disabled=false;
+decodeBtn.disabled=msgInput.value.trim().length<10;
 }
 }
 
@@ -1452,7 +1459,7 @@ html+='<div style="color:var(--text-muted)">What they said</div>';
 html+='<div style="color:var(--accent)">What they meant</div>';
 html+='</div>';
 r.translation.forEach(t=>{
-const toneClass='tone-'+escapeHtml(t.tone||'neutral');
+const toneClass='tone-'+(t.tone||'neutral').toLowerCase().replace(/[^a-z_]/g,'');
 const toneLabel=(t.tone||'neutral').replace(/_/g,' ');
 html+='<div class="trans-pair">';
 html+='<div class="trans-original">'+escapeHtml(t.original)+'</div>';
@@ -1483,8 +1490,8 @@ const score=r.toxicity_score;
 const scoreColor=score<=3?'var(--safe)':score<=6?'var(--warn)':'var(--danger)';
 html+='<div class="result-block"><h3><span class="ico">&#128200;</span> Toxicity Score</h3>';
 html+='<div class="tox-score-row">';
-html+='<div class="tox-number" style="color:'+scoreColor+'">'+score.toFixed(1)+'</div>';
-html+='<div class="tox-bar-wrap"><div class="tox-bar"><div class="tox-bar-fill" style="width:'+(score*10)+'%"></div></div>';
+html+='<div class="tox-number" id="toxScoreNum" style="color:'+scoreColor+'" data-target="'+score.toFixed(1)+'">0.0</div>';
+html+='<div class="tox-bar-wrap"><div class="tox-bar" role="progressbar" aria-valuenow="'+score.toFixed(1)+'" aria-valuemin="0" aria-valuemax="10" aria-label="Toxicity score"><div class="tox-bar-fill" style="width:'+(score*10)+'%"></div></div>';
 if(r.verdict)html+='<div class="tox-verdict">'+escapeHtml(r.verdict)+'</div>';
 html+='</div></div>';
 /* Breakdown */
@@ -1509,7 +1516,24 @@ resultContent.innerHTML=html;
 requestAnimationFrame(()=>{requestAnimationFrame(()=>{
 const bar=resultContent.querySelector('.tox-bar-fill');
 if(bar)bar.style.width=(score*10)+'%';
+/* countUp animation for toxicity score */
+const numEl=$('toxScoreNum');
+if(numEl){animateCountUp(numEl,0,score,1200);}
 })});
+}
+
+function animateCountUp(el,from,to,duration){
+const start=performance.now();
+function easeOut(t){return 1-Math.pow(1-t,3);}
+function tick(now){
+const elapsed=now-start;
+const progress=Math.min(elapsed/duration,1);
+const easedProgress=easeOut(progress);
+const current=from+(to-from)*easedProgress;
+el.textContent=current.toFixed(1);
+if(progress<1)requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
 }
 
 /* ── Share Card (Canvas) ── */

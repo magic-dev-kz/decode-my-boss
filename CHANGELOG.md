@@ -1,5 +1,25 @@
 # Decode My Boss — Changelog
 
+## v6.0 (2026-03-29) — Polish & Accessibility
+
+### Added
+- **JetBrains Mono** — connected via Google Fonts for monospace elements (code, scores, evidence)
+- **Shadow design tokens** — `--shadow-sm`, `--shadow-md`, `--shadow-lg`, `--shadow-xl` CSS variables with dual-layer (ambient + direct) shadows; all inline box-shadows consolidated
+- **Toxicity countUp animation** — score animates from 0 to final value over 1.2s with ease-out easing using `requestAnimationFrame`
+- **Toxicity bar ARIA** — `role="progressbar"`, `aria-valuenow`, `aria-valuemin="0"`, `aria-valuemax="10"`, `aria-label="Toxicity score"` on the toxicity bar element
+- **Tone tag sanitization** — CSS class names from AI tone labels sanitized via `.replace(/[^a-z_]/g, '')` to prevent class injection / XSS
+
+### Changed
+- **Mobile padding fix** — container padding increased from 12px to 16px on mobile; card padding minimum 20px on mobile breakpoint
+- **Decode button disable** — button disabled during API request with `opacity: 0.6` + `cursor: not-allowed`; re-enabled in `finally` block
+- **Subtitle updated** — tagline changed to "Paste what your boss wrote. See what they really meant."
+- SW cache bumped to `v6.0`
+
+### Preserved
+- All v5.x features intact (decode, draft response, tone slider, copy, examples, history, share card, feedback)
+- All AI integration (OpenAI, Gemini, Anthropic) untouched
+- `prefers-reduced-motion` respected
+
 ## v5.0 (2026-03-29) — Full Cycle: Decode + Respond
 
 ### Added
