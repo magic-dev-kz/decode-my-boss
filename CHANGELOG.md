@@ -1,5 +1,23 @@
 # Decode My Boss — Changelog
 
+## v14.0 (2026-03-29) — Undo Decode
+
+Feature update by Mario.
+
+### Undo Decode
+- "New Analysis" button (previously just "New") now clears the result and returns to the input screen
+- Auto-focuses the textarea on return so you can start typing immediately
+- Faster than scrolling back to the input section manually
+
+### Service Worker
+- Cache version bumped to `decode-my-boss-v14.0`
+
+### Preserved
+- All v13.x features intact (quick reply chips, response templates)
+- All AI integration untouched
+
+---
+
 ## v13.0 (2026-03-29) — Quick Replies
 
 Feature update by Mario.

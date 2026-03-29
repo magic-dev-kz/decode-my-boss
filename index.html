@@ -1640,7 +1640,7 @@ header p{
 <button class="btn-share" id="shareBtn">&#128228; Share</button>
 <button class="btn-share-link" id="shareLinkBtn">&#128279; Share as link</button>
 <button class="btn-share-x" id="shareXBtn">&#120143; Share on X</button>
-<button class="btn-new" id="newBtn">&#128196; New</button>
+<button class="btn-new" id="newBtn">&#128196; New Analysis</button>
 </div>
 </div>
 <div id="resultContent" aria-live="polite"></div>
@@ -2247,6 +2247,7 @@ newBtn.addEventListener('click',()=>{
 msgInput.value='';decodeBtn.disabled=true;shortWarn.classList.remove('show');
 updateMsgStats();
 showSection('sec-input');
+setTimeout(()=>{msgInput.focus()},120);
 });
 
 /* ── Keyboard: Escape closes dropdown + Arrow keys in settings dropdown ── */
