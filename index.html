@@ -1335,6 +1335,103 @@ header p{
   border-top-color:rgba(0,0,0,.85);
 }
 .draft-btn-wrap:hover .draft-tooltip{display:block}
+
+/* -- Drafted Responses History (v12) -- */
+.drafted-responses-section{margin-top:20px;animation:fadeIn .4s ease}
+.drafted-responses-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.drafted-responses-header h3{font-size:.9rem;color:var(--text-muted);display:flex;align-items:center;gap:6px;font-weight:600}
+.drafted-responses-clear{
+  font-size:.75rem;color:var(--danger);
+  padding:5px 12px;border-radius:8px;
+  border:1px solid rgba(239,68,68,.2);
+  transition:all .3s ease;font-weight:600;
+}
+.drafted-responses-clear:hover{
+  background:rgba(239,68,68,.1);
+  border-color:rgba(239,68,68,.35);
+  transform:translateY(-1px);
+}
+.drafted-response-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:14px;
+  background:var(--glass-bg);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border-radius:10px;
+  margin-bottom:8px;
+  border:1px solid rgba(124,92,252,.15);
+  transition:all .3s ease;
+  cursor:pointer;
+}
+.drafted-response-item:hover{
+  background:rgba(124,92,252,.06);
+  border-color:rgba(124,92,252,.3);
+  transform:translateX(4px);
+  box-shadow:0 4px 16px rgba(0,0,0,.2);
+}
+.drafted-response-text{
+  flex:1;min-width:0;
+  font-size:.82rem;color:var(--text);line-height:1.5;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.drafted-response-meta{
+  font-size:.7rem;color:var(--text-muted);margin-top:4px;
+  white-space:nowrap;
+}
+.drafted-response-copy{
+  flex-shrink:0;
+  padding:6px 12px;border-radius:8px;
+  font-size:.75rem;font-weight:600;
+  background:linear-gradient(135deg,#7c5cfc 0%,#c084fc 100%);
+  color:#fff;transition:all .3s ease;
+}
+.drafted-response-copy:hover{
+  transform:scale(1.05);
+  box-shadow:0 2px 12px rgba(124,92,252,.3);
+}
+.drafted-response-copy.copied{
+  background:rgba(34,197,94,.15);color:var(--safe);box-shadow:none;
+}
+
+/* -- Quick Copy Toast (v12) -- */
+.quick-copy-toast{
+  position:fixed;
+  bottom:40px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--safe);
+  color:#000;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:.82rem;font-weight:600;
+  padding:8px 20px;
+  border-radius:20px;
+  opacity:0;pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+  z-index:200;
+  box-shadow:0 4px 16px rgba(34,197,94,.3);
+}
+.quick-copy-toast.visible{
+  opacity:1;transform:translateX(-50%) translateY(0);
+}
+
+/* -- Decoded phrase click-to-copy (v12) -- */
+.trans-decoded{cursor:pointer;position:relative}
+.trans-decoded:active{opacity:.7}
+
+/* -- Toxicity Trend Sparkline (v12) -- */
+.tox-trend-section{
+  margin-top:16px;
+  animation:fadeIn .4s ease;
+}
+.tox-trend-header{
+  font-size:.78rem;color:var(--text-muted);
+  font-weight:600;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.tox-trend-canvas{
+  width:100%;height:60px;
+  border-radius:8px;
+  background:rgba(0,0,0,.2);
+}
 </style>
 </head>
 <body>
@@ -1488,6 +1585,17 @@ header p{
 </div>
 <div id="historyList" role="list" aria-label="Recent decode history"></div>
 </div>
+<div class="tox-trend-section" id="toxTrendSection" style="display:none">
+<div class="tox-trend-header">&#128200; Toxicity Trend</div>
+<canvas class="tox-trend-canvas" id="toxTrendCanvas" width="600" height="60"></canvas>
+</div>
+<div class="drafted-responses-section" id="draftedResponsesSection" style="display:none">
+<div class="drafted-responses-header">
+<h3>&#9997;&#65039; My Drafted Responses</h3>
+<button class="drafted-responses-clear" id="draftedResponsesClear" aria-label="Clear drafted responses">Clear All</button>
+</div>
+<div id="draftedResponsesList"></div>
+</div>
 </section>
 
 <!-- LOADING -->
@@ -1541,6 +1649,9 @@ header p{
   <button type="button" class="pwa-install-btn" id="pwaInstallBtn">Install</button>
   <button type="button" class="pwa-dismiss-btn" id="pwaDismissBtn" aria-label="Dismiss install prompt">Not now</button>
 </div>
+
+<!-- Quick Copy Toast (v12) -->
+<div class="quick-copy-toast" id="quickCopyToast"></div>
 
 <!-- Share preview (offscreen canvas) -->
 <canvas id="shareCanvas" width="2400" height="1260" style="display:none"></canvas>
@@ -2194,6 +2305,8 @@ historyList.querySelectorAll('.history-item').forEach(el=>{
 el.addEventListener('click',()=>loadHistoryItem(parseInt(el.dataset.histIdx,10)));
 el.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();loadHistoryItem(parseInt(el.dataset.histIdx,10))}});
 });
+/* v12: update toxicity trend */
+if(typeof renderToxTrend==='function')renderToxTrend();
 }
 
 function loadHistoryItem(idx){
@@ -2402,6 +2515,8 @@ html+='<button class="btn-copy-draft" id="copyDraftBtn">&#128203; Copy Response<
 html+='</div></div>';
 draftResult.innerHTML=html;
 draftResult.style.display='block';
+/* v12: Save drafted response */
+addDraftedResponse(response,contextSel.value);
 /* Bind copy */
 $('copyDraftBtn').addEventListener('click',function(){
 if(!lastDraftText)return;
@@ -2647,6 +2762,153 @@ banner.style.display='none';
 lsSet('dmb_welcome_dismissed','1');
 });
 })();
+
+/* ── v12: Quick Copy Toast ── */
+const quickCopyToast=$('quickCopyToast');
+let quickCopyTimer=null;
+function showQuickCopyToast(msg){
+quickCopyToast.textContent=msg;
+quickCopyToast.classList.add('visible');
+clearTimeout(quickCopyTimer);
+quickCopyTimer=setTimeout(function(){quickCopyToast.classList.remove('visible')},1500);
+}
+
+/* ── v12: Quick Copy Decoded Translation — click on any .trans-decoded to copy ── */
+document.addEventListener('click',function(e){
+const decoded=e.target.closest('.trans-decoded');
+if(!decoded)return;
+/* Get text without tone tag */
+const clone=decoded.cloneNode(true);
+const tags=clone.querySelectorAll('.tone-tag');
+tags.forEach(function(t){t.remove()});
+const text=clone.textContent.trim();
+if(!text)return;
+if(navigator.clipboard&&navigator.clipboard.writeText){
+navigator.clipboard.writeText(text).then(function(){showQuickCopyToast('Copied: '+text.substring(0,60)+(text.length>60?'...':''))}).catch(function(){});
+}else{
+const ta=document.createElement('textarea');
+ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';
+document.body.appendChild(ta);ta.select();
+try{document.execCommand('copy');showQuickCopyToast('Copied: '+text.substring(0,60)+(text.length>60?'...':''))}catch(ex){}
+document.body.removeChild(ta);
+}
+});
+
+/* ── v12: Drafted Responses History ── */
+const DRAFTS_KEY='dmb_drafted_responses';
+const DRAFTS_MAX=10;
+const draftedResponsesSection=$('draftedResponsesSection');
+const draftedResponsesList=$('draftedResponsesList');
+const draftedResponsesClear=$('draftedResponsesClear');
+
+function getDraftedResponses(){try{const raw=lsGet(DRAFTS_KEY);if(!raw)return[];const d=JSON.parse(raw);return Array.isArray(d)?d:[]}catch(e){return[]}}
+function saveDraftedResponses(arr){try{lsSet(DRAFTS_KEY,JSON.stringify(arr.slice(0,DRAFTS_MAX)))}catch(e){}}
+
+function addDraftedResponse(text,context){
+if(!text||!text.trim())return;
+const drafts=getDraftedResponses();
+drafts.unshift({text:text.trim(),context:context||'',timestamp:Date.now()});
+saveDraftedResponses(drafts);
+renderDraftedResponses();
+}
+
+function renderDraftedResponses(){
+const drafts=getDraftedResponses();
+if(!drafts.length){draftedResponsesSection.style.display='none';return}
+draftedResponsesSection.style.display='block';
+let html='';
+drafts.forEach(function(d,i){
+html+='<div class="drafted-response-item" data-draft-idx="'+i+'">';
+html+='<div style="flex:1;min-width:0">';
+html+='<div class="drafted-response-text">'+escapeHtml(d.text)+'</div>';
+html+='<div class="drafted-response-meta">'+escapeHtml(d.context||'')+' &middot; '+escapeHtml(relativeTime(d.timestamp))+'</div>';
+html+='</div>';
+html+='<button class="drafted-response-copy" data-draft-text="'+escapeHtml(d.text)+'">Copy</button>';
+html+='</div>';
+});
+draftedResponsesList.innerHTML=html;
+/* Bind copy buttons */
+draftedResponsesList.querySelectorAll('.drafted-response-copy').forEach(function(btn){
+btn.addEventListener('click',function(e){
+e.stopPropagation();
+const text=this.dataset.draftText;
+if(navigator.clipboard&&navigator.clipboard.writeText){
+navigator.clipboard.writeText(text).then(function(){showQuickCopyToast('Response copied!')}).catch(function(){});
+}else{
+const ta=document.createElement('textarea');
+ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';
+document.body.appendChild(ta);ta.select();
+try{document.execCommand('copy');showQuickCopyToast('Response copied!')}catch(ex){}
+document.body.removeChild(ta);
+}
+const b=this;b.classList.add('copied');b.textContent='Copied!';
+setTimeout(function(){b.classList.remove('copied');b.textContent='Copy'},1500);
+});
+});
+}
+
+draftedResponsesClear.addEventListener('click',function(){
+lsSet(DRAFTS_KEY,'[]');
+renderDraftedResponses();
+});
+
+renderDraftedResponses();
+
+/* ── v12: Toxicity Trend Sparkline ── */
+const toxTrendSection=$('toxTrendSection');
+const toxTrendCanvas=$('toxTrendCanvas');
+
+function renderToxTrend(){
+const hist=getHistory();
+if(hist.length<3){toxTrendSection.style.display='none';return}
+toxTrendSection.style.display='block';
+const scores=hist.slice(0,10).map(function(h){return h.toxicity_score||0}).reverse();
+const canvas=toxTrendCanvas;
+const ctx2=canvas.getContext('2d');
+const W=canvas.width;
+const H=canvas.height;
+const pad=12;
+ctx2.clearRect(0,0,W,H);
+const n=scores.length;
+const stepX=(W-pad*2)/(n-1);
+/* Draw gradient fill under the line */
+ctx2.beginPath();
+ctx2.moveTo(pad,H-pad-(scores[0]/10)*(H-pad*2));
+for(let i=1;i<n;i++){
+ctx2.lineTo(pad+i*stepX,H-pad-(scores[i]/10)*(H-pad*2));
+}
+ctx2.lineTo(pad+(n-1)*stepX,H-pad);
+ctx2.lineTo(pad,H-pad);
+ctx2.closePath();
+const grd=ctx2.createLinearGradient(0,0,0,H);
+grd.addColorStop(0,'rgba(74,158,255,.25)');
+grd.addColorStop(1,'rgba(74,158,255,.02)');
+ctx2.fillStyle=grd;
+ctx2.fill();
+/* Draw line */
+ctx2.beginPath();
+ctx2.moveTo(pad,H-pad-(scores[0]/10)*(H-pad*2));
+for(let i=1;i<n;i++){
+ctx2.lineTo(pad+i*stepX,H-pad-(scores[i]/10)*(H-pad*2));
+}
+ctx2.strokeStyle='#4a9eff';
+ctx2.lineWidth=2;
+ctx2.lineJoin='round';
+ctx2.lineCap='round';
+ctx2.stroke();
+/* Draw dots */
+for(let i=0;i<n;i++){
+const x=pad+i*stepX;
+const y=H-pad-(scores[i]/10)*(H-pad*2);
+const col=scores[i]<=3?'#22c55e':scores[i]<=6?'#f59e0b':'#ef4444';
+ctx2.beginPath();
+ctx2.arc(x,y,3,0,Math.PI*2);
+ctx2.fillStyle=col;
+ctx2.fill();
+}
+}
+
+renderToxTrend();
 
 /* ── PWA ── */
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}

@@ -1,5 +1,23 @@
 # Decode My Boss — Changelog
 
+## v12.0 (2026-03-29) — Power Features
+
+### Added
+- **Drafted Responses History** — every AI-drafted response is saved to localStorage under `dmb_drafted_responses` (max 10); displayed in "My Drafted Responses" section on the input screen with context label and relative timestamp; each entry has a Copy button; "Clear All" to wipe saved drafts
+- **Quick Copy Decoded Translation** — clicking any decoded translation phrase (`.trans-decoded`) copies the text to clipboard (without the tone tag); shows a global toast "Copied: [preview]" at the bottom of the screen; smooth fade animation
+- **Toxicity Trend Sparkline** — when 3+ decodes exist in history, a canvas sparkline chart appears showing toxicity scores over time (up to last 10); dots colored green/yellow/red by score; gradient fill under the line; updates on every new decode
+
+### Changed
+- SW cache bumped to `decode-my-boss-v12.0`
+
+### Preserved
+- All v11.x features intact (animated gradient border on welcome banner, template chip hover lift)
+- All AI integration (OpenAI, Gemini, Anthropic) untouched
+- Share card canvas generation unchanged
+- Feedback widget unchanged
+
+---
+
 ## v11.0 (2026-03-29) — Micro-improvements
 
 ### Changed
