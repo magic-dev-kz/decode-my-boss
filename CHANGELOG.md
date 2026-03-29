@@ -1,5 +1,14 @@
 # Decode My Boss — Changelog
 
+## v17.0 (2026-03-29) — Accessibility Pass
+
+- **Skip link**: Hidden skip-to-content link appears on Tab for keyboard users, jumps to message input
+- **Tone slider aria-valuetext**: Slider now announces current tone label (e.g. "Diplomatic", "Very Direct") to screen readers
+- **Draft button aria-label**: Draft Response button has descriptive aria-label for assistive tech
+- SW cache bumped to `decode-my-boss-v17.0`
+
+---
+
 ## v16.0 (2026-03-29) — Full Result Copy
 
 - **Copy Entire Result**: Copy button now copies full formatted decode (translation, red flags, toxicity score, playbook)

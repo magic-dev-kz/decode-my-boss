@@ -1459,6 +1459,7 @@ header p{
 </style>
 </head>
 <body>
+<a href="#sec-input" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999;padding:8px 16px;background:#4a9eff;color:#fff;font-size:14px;font-weight:600;text-decoration:none;border-radius:0 0 8px 0;" onfocus="this.style.position='fixed';this.style.left='0';this.style.top='0';this.style.width='auto';this.style.height='auto';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">Skip to main content</a>
 <div class="container">
 <header>
 <h1><span class="icon">&#128270;</span> Decode My Boss</h1>
@@ -1589,7 +1590,7 @@ header p{
 <span>&#127908; Response Tone</span>
 <span class="tone-slider-value" id="toneValue">Neutral</span>
 </div>
-<input type="range" class="tone-slider" id="toneSlider" min="1" max="5" value="3" step="1" aria-label="Response tone from diplomatic to direct">
+<input type="range" class="tone-slider" id="toneSlider" min="1" max="5" value="3" step="1" aria-label="Response tone from diplomatic to direct" aria-valuetext="Neutral">
 <div class="tone-slider-labels">
 <span>Diplomatic</span>
 <span>Direct</span>
@@ -1647,7 +1648,7 @@ header p{
 <div class="draft-section" id="draftSection">
 <div class="draft-btn-wrap">
 <span class="draft-tooltip">AI writes your reply — choose your tone</span>
-<button class="draft-btn" id="draftBtn">&#9997;&#65039; Draft a Response</button>
+<button class="draft-btn" id="draftBtn" aria-label="Draft a professional response using AI">&#9997;&#65039; Draft a Response</button>
 </div>
 <div id="draftLoading" style="display:none" class="draft-loading">
 <div class="draft-loading-text">Crafting your response...</div>
@@ -2534,6 +2535,7 @@ const toneValue=$('toneValue');
 const toneLabels={1:'Very Diplomatic',2:'Diplomatic',3:'Neutral',4:'Direct',5:'Very Direct'};
 toneSlider.addEventListener('input',()=>{
 toneValue.textContent=toneLabels[toneSlider.value]||'Neutral';
+toneSlider.setAttribute('aria-valuetext',toneLabels[toneSlider.value]||'Neutral');
 });
 
 /* ── Draft Response (v5) ── */
