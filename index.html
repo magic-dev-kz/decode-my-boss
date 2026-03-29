@@ -2079,6 +2079,28 @@ html+='<div class="play-step"><div class="play-num">'+(i+1)+'</div><div class="p
 });
 html+='</div>';
 
+/* v15: AI Confidence Meter — heuristic based on tone tag definitiveness */
+const definitiveTones=['passive_aggressive','threatening','dismissive','condescending','manipulative','urgent','blame_shifting','gaslighting','power_play','hostile','toxic','controlling'];
+const ambiguousTones=['neutral','unclear','ambiguous','mixed','vague','polite','professional'];
+let defCount=0,ambCount=0;
+r.translation.forEach(t=>{
+const tone=(t.tone||'neutral').toLowerCase().replace(/[^a-z_]/g,'');
+if(definitiveTones.some(d=>tone.indexOf(d)!==-1))defCount++;
+else if(ambiguousTones.some(a=>tone.indexOf(a)!==-1))ambCount++;
+else defCount+=0.5; // partially definitive
+});
+const totalTones=r.translation.length||1;
+const confidence=Math.round(Math.min(95,Math.max(40,((defCount/totalTones)*55+40))));
+html+='<div class="result-block"><h3><span class="ico">&#129302;</span> AI Confidence</h3>';
+html+='<div style="display:flex;align-items:center;gap:12px;margin-top:8px">';
+html+='<div style="flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden">';
+html+='<div id="confidenceBarFill" style="width:0%;height:100%;border-radius:4px;background:'+
+(confidence>=75?'var(--safe)':confidence>=55?'var(--warn)':'var(--danger)')+
+';transition:width 1s ease"></div></div>';
+html+='<span id="confidenceVal" style="font-family:var(--mono);font-size:.9rem;font-weight:700;color:'+
+(confidence>=75?'var(--safe)':confidence>=55?'var(--warn)':'var(--danger)')+'">0%</span></div>';
+html+='<div style="font-size:.75rem;color:var(--text-muted);margin-top:6px">'+(confidence>=75?'Clear tonal patterns detected':'Some tonal ambiguity in the message')+'</div></div>';
+
 resultContent.innerHTML=html;
 /* Animate toxicity bar */
 requestAnimationFrame(()=>{requestAnimationFrame(()=>{
@@ -2087,10 +2109,15 @@ if(bar)bar.style.width=(score*10)+'%';
 /* countUp animation for toxicity score */
 const numEl=$('toxScoreNum');
 if(numEl){animateCountUp(numEl,0,score,1200);}
+/* v15: animate confidence bar */
+const confBar=document.getElementById('confidenceBarFill');
+if(confBar)confBar.style.width=confidence+'%';
+const confVal=document.getElementById('confidenceVal');
+if(confVal)animateCountUp(confVal,0,confidence,1000,true);
 })});
 }
 
-function animateCountUp(el,from,to,duration){
+function animateCountUp(el,from,to,duration,isInt){
 const start=performance.now();
 function easeOut(t){return 1-Math.pow(1-t,3);}
 function tick(now){
@@ -2098,7 +2125,7 @@ const elapsed=now-start;
 const progress=Math.min(elapsed/duration,1);
 const easedProgress=easeOut(progress);
 const current=from+(to-from)*easedProgress;
-el.textContent=current.toFixed(1);
+el.textContent=isInt?Math.round(current)+'%':current.toFixed(1);
 if(progress<1)requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);

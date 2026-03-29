@@ -1,5 +1,23 @@
 # Decode My Boss — Changelog
 
+## v15.0 (2026-03-29) — AI Confidence Meter
+
+Feature update by Mario.
+
+### AI Confidence Meter
+- After decoding, a new "AI Confidence" section shows a percentage bar (40-95%) based on response consistency
+- Heuristic: counts definitive tone tags (passive_aggressive, threatening, etc.) vs ambiguous ones (neutral, unclear, etc.)
+- Color-coded: green (75%+), yellow (55-74%), red (below 55%)
+- Animated count-up and bar fill on render
+
+### Service Worker
+- Cache version bumped to `decode-my-boss-v15.0`
+
+### Preserved
+- All v14.x features intact (undo decode)
+
+---
+
 ## v14.0 (2026-03-29) — Undo Decode
 
 Feature update by Mario.
