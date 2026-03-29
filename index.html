@@ -805,6 +805,172 @@ header p{
   .loading-wrap{padding:60px 16px}
 }
 
+/* -- Templates Library (v8) -- */
+.templates-section{margin-top:14px}
+.templates-toggle{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;
+  background:rgba(var(--accent-rgb),.04);
+  border:1px solid rgba(var(--accent-rgb),.12);
+  border-radius:10px;
+  font-size:.85rem;font-weight:600;color:var(--text-sec);
+  cursor:pointer;transition:all .3s ease;
+}
+.templates-toggle:hover{
+  background:rgba(var(--accent-rgb),.08);
+  border-color:rgba(var(--accent-rgb),.25);
+  color:var(--text);
+}
+.templates-toggle .tmpl-arrow{
+  transition:transform .3s ease;font-size:.7rem;
+}
+.templates-toggle.open .tmpl-arrow{transform:rotate(180deg)}
+.templates-body{
+  display:none;
+  padding:14px 0 0;
+  animation:fadeIn .3s ease;
+}
+.templates-body.open{display:block}
+.templates-category{margin-bottom:14px}
+.templates-cat-label{
+  font-size:.72rem;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:1.2px;
+  font-weight:700;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.templates-list{display:flex;flex-wrap:wrap;gap:6px}
+.template-chip{
+  padding:7px 14px;border-radius:20px;
+  font-size:.76rem;font-weight:500;
+  background:rgba(0,0,0,.2);
+  color:var(--text-sec);
+  border:1px solid rgba(255,255,255,.08);
+  transition:all .25s ease;
+  cursor:pointer;text-align:left;
+}
+.template-chip:hover{
+  background:rgba(var(--accent-rgb),.1);
+  color:var(--text);
+  border-color:rgba(var(--accent-rgb),.3);
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(var(--accent-rgb),.12);
+}
+.template-chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.template-chip.cat-passive{border-color:rgba(239,68,68,.15)}
+.template-chip.cat-passive:hover{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.08)}
+.template-chip.cat-power{border-color:rgba(168,85,247,.15)}
+.template-chip.cat-power:hover{border-color:rgba(168,85,247,.35);background:rgba(168,85,247,.08)}
+.template-chip.cat-threat{border-color:rgba(245,158,11,.15)}
+.template-chip.cat-threat:hover{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.08)}
+
+/* -- History Summary Card (v8) -- */
+.history-summary-card{
+  background:var(--glass-bg);
+  backdrop-filter:blur(var(--glass-blur));
+  -webkit-backdrop-filter:blur(var(--glass-blur));
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:22px;
+  margin-bottom:16px;
+  box-shadow:var(--shadow-lg);
+  animation:fadeInUp .4s ease;
+  position:relative;overflow:hidden;
+}
+.history-summary-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:2px;
+  background:var(--accent-gradient);
+  opacity:.4;
+}
+.history-summary-header{
+  display:flex;align-items:center;gap:16px;margin-bottom:16px;
+}
+.history-summary-score{
+  font-size:2.2rem;font-weight:900;font-family:var(--mono);
+  min-width:60px;text-align:center;
+  text-shadow:0 0 20px currentColor;
+}
+.history-summary-verdict{
+  flex:1;font-size:.88rem;color:var(--text);font-style:italic;line-height:1.5;
+}
+.history-summary-flags{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;
+}
+.history-summary-flag{
+  padding:6px 12px;border-radius:8px;
+  font-size:.75rem;font-weight:600;
+  background:rgba(0,0,0,.25);
+  border-left:3px solid var(--text-muted);
+}
+.history-summary-flag.sev-high{border-left-color:var(--danger);color:#f87171}
+.history-summary-flag.sev-medium{border-left-color:var(--warn);color:#fbbf24}
+.history-summary-flag.sev-low{border-left-color:var(--safe);color:#4ade80}
+.history-summary-decoded{
+  font-family:var(--mono);font-size:.82rem;
+  color:var(--text-sec);line-height:1.6;
+  padding:10px 14px;
+  background:rgba(var(--accent-rgb),.04);
+  border-left:3px solid;
+  border-image:var(--accent-gradient) 1;
+  border-radius:0 8px 8px 0;
+  margin-bottom:12px;
+}
+.history-summary-meta{
+  font-size:.75rem;color:var(--text-muted);
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+  margin-top:12px;
+}
+.history-summary-actions{
+  display:flex;gap:8px;margin-top:14px;
+}
+.btn-redecode{
+  padding:8px 16px;border-radius:8px;
+  font-size:.8rem;font-weight:600;
+  background:rgba(var(--accent-rgb),.1);
+  color:var(--accent);
+  border:1px solid rgba(var(--accent-rgb),.2);
+  transition:all .3s ease;
+}
+.btn-redecode:hover{
+  background:rgba(var(--accent-rgb),.18);
+  border-color:rgba(var(--accent-rgb),.4);
+  transform:translateY(-1px);
+}
+.btn-back-input{
+  padding:8px 16px;border-radius:8px;
+  font-size:.8rem;font-weight:600;
+  background:var(--glass-bg);
+  color:var(--text-sec);
+  border:1px solid var(--glass-border);
+  transition:all .3s ease;
+}
+.btn-back-input:hover{
+  border-color:rgba(var(--accent-rgb),.3);
+  color:var(--text);
+}
+
+/* -- Share Link Button (v8) -- */
+.btn-share-link{
+  padding:9px 16px;border-radius:10px;
+  font-size:.82rem;font-weight:600;
+  background:var(--glass-bg);
+  backdrop-filter:blur(var(--glass-blur));
+  -webkit-backdrop-filter:blur(var(--glass-blur));
+  color:var(--text-sec);
+  border:1px solid var(--glass-border);
+  transition:all .3s ease;
+}
+.btn-share-link:hover{
+  border-color:rgba(var(--accent-rgb),.3);
+  color:var(--text);
+  box-shadow:0 0 12px rgba(var(--accent-rgb),.1);
+}
+.btn-share-link.copied{
+  background:rgba(34,197,94,.12);
+  border-color:rgba(34,197,94,.3);
+  color:var(--safe);
+}
+
 /* -- Scrollbar styling -- */
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -1100,6 +1266,40 @@ header p{
 <button class="example-chip" role="listitem" data-example="We need to be more strategic about how we approach these opportunities.">We need to be more strategic</button>
 </div>
 </div>
+<div class="templates-section">
+<button class="templates-toggle" id="templatesToggle" aria-expanded="false" aria-controls="templatesBody">
+<span>&#128172; Common Boss Messages</span>
+<span class="tmpl-arrow">&#9660;</span>
+</button>
+<div class="templates-body" id="templatesBody" role="region" aria-label="Common boss message templates">
+<div class="templates-category">
+<div class="templates-cat-label"><span>&#128545;</span> Passive-Aggressive</div>
+<div class="templates-list">
+<button class="template-chip cat-passive" data-tmpl="Per my last email, I wanted to follow up on this matter.">Per my last email</button>
+<button class="template-chip cat-passive" data-tmpl="As discussed, I trust this will be handled appropriately.">As discussed</button>
+<button class="template-chip cat-passive" data-tmpl="Going forward, let's make sure we're aligned on expectations.">Going forward</button>
+<button class="template-chip cat-passive" data-tmpl="Just to clarify, since there seems to be some confusion on this.">Just to clarify</button>
+</div>
+</div>
+<div class="templates-category">
+<div class="templates-cat-label"><span>&#9889;</span> Power Moves</div>
+<div class="templates-list">
+<button class="template-chip cat-power" data-tmpl="I need this ASAP, please drop everything and prioritize accordingly.">I need this ASAP</button>
+<button class="template-chip cat-power" data-tmpl="Let's circle back on this next week, I have some thoughts.">Let's circle back</button>
+<button class="template-chip cat-power" data-tmpl="I'll loop in leadership so we can get alignment on this.">I'll loop in leadership</button>
+<button class="template-chip cat-power" data-tmpl="I've taken the liberty of reassigning some of your tasks to ensure timely delivery.">I've reassigned your tasks</button>
+</div>
+</div>
+<div class="templates-category">
+<div class="templates-cat-label"><span>&#9888;</span> Vague Threats</div>
+<div class="templates-list">
+<button class="template-chip cat-threat" data-tmpl="We need to talk. Can you come to my office when you get a chance?">We need to talk</button>
+<button class="template-chip cat-threat" data-tmpl="Let's discuss your performance and expectations moving forward.">Let's discuss your performance</button>
+<button class="template-chip cat-threat" data-tmpl="This is disappointing. I expected better from someone at your level.">This is disappointing</button>
+</div>
+</div>
+</div>
+</div>
 <div class="tone-slider-wrap">
 <div class="tone-slider-label">
 <span>&#127908; Response Tone</span>
@@ -1140,6 +1340,7 @@ header p{
 <div class="result-actions">
 <button class="btn-copy" id="copyBtn" aria-label="Copy decoded translation">&#128203; Copy Decoded</button>
 <button class="btn-share" id="shareBtn">&#128228; Share</button>
+<button class="btn-share-link" id="shareLinkBtn">&#128279; Share as link</button>
 <button class="btn-new" id="newBtn">&#128196; New</button>
 </div>
 </div>
@@ -1201,7 +1402,7 @@ const keyInput=$('keyInput'),saveKeyBtn=$('saveKeyBtn'),savedInd=$('savedInd'),c
 const gearBtn=$('gearBtn'),settingsDd=$('settingsDd'),ddProvider=$('ddProvider'),ddChangeKey=$('ddChangeKey'),ddClose=$('ddClose');
 const msgInput=$('msgInput'),charCount=$('charCount'),decodeBtn=$('decodeBtn'),shortWarn=$('shortWarn'),contextSel=$('contextSel');
 const decryptText=$('decryptText'),loadBar=$('loadBar');
-const resultContent=$('resultContent'),shareBtn=$('shareBtn'),newBtn=$('newBtn'),copyBtn=$('copyBtn');
+const resultContent=$('resultContent'),shareBtn=$('shareBtn'),newBtn=$('newBtn'),copyBtn=$('copyBtn'),shareLinkBtn=$('shareLinkBtn');
 const shareCanvas=$('shareCanvas');
 
 /* ── Section transitions ── */
@@ -1759,12 +1960,20 @@ function getHistory(){try{const raw=lsGet(HISTORY_KEY);if(!raw)return[];const d=
 function saveHistory(arr){try{lsSet(HISTORY_KEY,JSON.stringify(arr.slice(0,HISTORY_MAX)))}catch(e){}}
 
 function addToHistory(msgSnippet,ctx,result){
+const topFlags=(Array.isArray(result.red_flags)?result.red_flags:[]).slice(0,2).map(f=>({
+type:(f.type||'').replace(/_/g,' '),
+severity:f.severity||'low'
+}));
+const firstDecoded=(Array.isArray(result.translation)&&result.translation.length>0)?result.translation[0].decoded||'':'';
 const entry={
 message_snippet:msgSnippet.substring(0,80),
+full_message:msgSnippet.substring(0,300),
 context:ctx,
 toxicity_score:result.toxicity_score,
 red_flag_count:Array.isArray(result.red_flags)?result.red_flags.length:0,
 verdict:result.verdict||'',
+top_flags:topFlags,
+first_decoded:firstDecoded.substring(0,150),
 timestamp:Date.now()
 };
 const hist=getHistory();
@@ -1813,24 +2022,63 @@ if(!hist[idx])return;
 const h=hist[idx];
 const score=h.toxicity_score||0;
 const scoreColor=score<=3?'var(--safe)':score<=6?'var(--warn)':'var(--danger)';
-const toxClass=score<=3?'tox-low':score<=6?'tox-mid':'tox-high';
-let html='<div class="result-block" style="text-align:center;padding:28px">';
-html+='<div class="tox-number" style="color:'+scoreColor+';font-size:2.8rem;margin-bottom:8px">'+score.toFixed(1)+'</div>';
-html+='<div style="font-size:.82rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Toxicity Score</div>';
-if(h.verdict)html+='<div class="tox-verdict" style="margin-bottom:12px">'+escapeHtml(h.verdict)+'</div>';
-html+='<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:12px">';
-html+='<span class="history-tox-badge '+toxClass+'" style="padding:4px 12px">'+escapeHtml(h.context||'')+'</span>';
-const flagCount=h.red_flag_count||0;
-const flagColor=flagCount===0?'var(--safe)':flagCount<=2?'var(--warn)':'var(--danger)';
-html+='<span style="font-size:.82rem;color:'+flagColor+';font-weight:700">'+flagCount+' red flag'+(flagCount!==1?'s':'')+'</span>';
+let html='<div class="history-summary-card">';
+/* Header: score + verdict */
+html+='<div class="history-summary-header">';
+html+='<div class="history-summary-score" style="color:'+scoreColor+'">'+score.toFixed(1)+'</div>';
+html+='<div class="history-summary-verdict">'+(h.verdict?escapeHtml(h.verdict):'No verdict available')+'</div>';
 html+='</div>';
-html+='<div style="font-size:.78rem;color:var(--text-muted)">'+escapeHtml(h.message_snippet||'')+'</div>';
-html+='<div style="font-size:.72rem;color:var(--text-muted);margin-top:8px">'+escapeHtml(relativeTime(h.timestamp))+'</div>';
-html+='<div style="font-size:.75rem;color:var(--text-muted);margin-top:16px;font-style:italic">Full analysis not stored for privacy. Decode again for details.</div>';
+/* Top 2 flags */
+const topFlags=Array.isArray(h.top_flags)?h.top_flags:[];
+if(topFlags.length>0){
+html+='<div class="history-summary-flags">';
+topFlags.forEach(f=>{
+html+='<div class="history-summary-flag sev-'+escapeHtml(f.severity||'low')+'">'+escapeHtml(f.type||'unknown')+'</div>';
+});
+html+='</div>';
+}else{
+const flagCount=h.red_flag_count||0;
+if(flagCount===0)html+='<div style="font-size:.82rem;color:var(--safe);margin-bottom:12px;font-weight:600">&#9989; No red flags</div>';
+else html+='<div style="font-size:.82rem;color:var(--warn);margin-bottom:12px;font-weight:600">'+flagCount+' red flag'+(flagCount!==1?'s':'')+' detected</div>';
+}
+/* First decoded phrase */
+if(h.first_decoded){
+html+='<div class="history-summary-decoded">&ldquo;'+escapeHtml(h.first_decoded)+'&rdquo;</div>';
+}
+/* Meta */
+html+='<div class="history-summary-meta">';
+html+='<span>'+escapeHtml(h.context||'')+'</span>';
+html+='<span>'+escapeHtml(relativeTime(h.timestamp))+'</span>';
+html+='</div>';
+/* Actions */
+html+='<div class="history-summary-actions">';
+html+='<button class="btn-redecode" data-hist-msg="'+escapeHtml(h.full_message||h.message_snippet||'')+'">&#128270; Decode Again</button>';
+html+='<button class="btn-back-input">&#8592; Back</button>';
+html+='</div>';
 html+='</div>';
 resultContent.innerHTML=html;
+/* Bind actions */
+const reDecodeBtn=resultContent.querySelector('.btn-redecode');
+if(reDecodeBtn){
+reDecodeBtn.addEventListener('click',function(){
+const msg=this.dataset.histMsg||'';
+if(msg){
+msgInput.value=msg;
+const len=msg.length;
+charCount.textContent=len+' / 5000';
+decodeBtn.disabled=len<10;
+showSection('sec-input');
+if(len>=10){apiKey=lsGet('dmb_key_'+currentProvider)||'';if(apiKey)decode();}
+}
+});
+}
+const backBtn=resultContent.querySelector('.btn-back-input');
+if(backBtn){
+backBtn.addEventListener('click',function(){
+showSection('sec-input');
+});
+}
 showSection('sec-result');
-showFeedbackWidget();
 }
 
 historyClear.addEventListener('click',()=>{
@@ -2113,12 +2361,63 @@ decodeBtn.click();
 }
 });
 
-/* ── v7: URL Share for Examples ── */
+/* ── v8: Templates Library Toggle ── */
+const templatesToggle=$('templatesToggle');
+const templatesBody=$('templatesBody');
+templatesToggle.addEventListener('click',function(){
+const isOpen=templatesBody.classList.toggle('open');
+templatesToggle.classList.toggle('open',isOpen);
+templatesToggle.setAttribute('aria-expanded',isOpen?'true':'false');
+});
+document.querySelectorAll('.template-chip').forEach(btn=>{
+btn.addEventListener('click',function(){
+const text=this.dataset.tmpl;
+msgInput.value=text;
+const len=text.length;
+charCount.textContent=len+' / 5000';
+charCount.classList.remove('warn','over');
+decodeBtn.disabled=len<10;
+shortWarn.classList.toggle('show',len>=10&&len<50);
+msgInput.focus();
+/* auto-decode if API key is configured */
+apiKey=lsGet('dmb_key_'+currentProvider)||'';
+if(apiKey&&len>=10){decode()}
+});
+});
+
+/* ── v8: Share as Link ── */
+shareLinkBtn.addEventListener('click',function(){
+if(!lastOriginalMsg)return;
+const encoded=encodeURIComponent(lastOriginalMsg.substring(0,500));
+const url=new URL(window.location.href.split('?')[0]);
+url.searchParams.set('example',encoded);
+const shareUrl=url.toString();
+if(navigator.clipboard&&navigator.clipboard.writeText){
+navigator.clipboard.writeText(shareUrl).then(()=>showShareLinkCopied()).catch(()=>fallbackShareLink(shareUrl));
+}else{fallbackShareLink(shareUrl)}
+});
+function fallbackShareLink(text){
+const ta=document.createElement('textarea');
+ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';
+document.body.appendChild(ta);ta.select();
+try{document.execCommand('copy');showShareLinkCopied()}catch(e){}
+document.body.removeChild(ta);
+}
+function showShareLinkCopied(){
+shareLinkBtn.classList.add('copied');
+const orig=shareLinkBtn.innerHTML;
+shareLinkBtn.innerHTML='&#10003; Link copied!';
+setTimeout(()=>{shareLinkBtn.classList.remove('copied');shareLinkBtn.innerHTML=orig},2000);
+}
+
+/* ── v7/v8: URL Share for Examples ── */
 (function(){
 const params=new URLSearchParams(window.location.search);
 const exParam=params.get('example');
 if(exParam){
+/* First try matching existing chips by slug */
 const chips=document.querySelectorAll('.example-chip');
+let matched=false;
 for(let i=0;i<chips.length;i++){
 const slug=chips[i].textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 if(slug===exParam){
@@ -2126,8 +2425,20 @@ msgInput.value=chips[i].dataset.example;
 const len=chips[i].dataset.example.length;
 charCount.textContent=len+' / 5000';
 decodeBtn.disabled=len<10;
+matched=true;
 break;
 }
+}
+/* v8: if not a chip slug, try decoding as encoded text */
+if(!matched){
+try{
+const decoded=decodeURIComponent(exParam);
+if(decoded.length>=10){
+msgInput.value=decoded;
+charCount.textContent=decoded.length+' / 5000';
+decodeBtn.disabled=false;
+}
+}catch(e){}
 }
 }
 })();

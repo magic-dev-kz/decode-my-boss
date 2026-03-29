@@ -1,5 +1,23 @@
 # Decode My Boss — Changelog
 
+## v8.0 (2026-03-29) — Enhanced Decode Experience
+
+### Added
+- **Message Templates Library** — collapsible "Common Boss Messages" section with 11 pre-built templates across 3 categories: Passive-Aggressive (4), Power Moves (4), Vague Threats (3); clicking a template fills textarea and auto-decodes if API key is configured
+- **Decode History Enhancement** — clicking a history item now shows a compact summary card with toxicity score, verdict, top 2 red flags (with severity coloring), and first decoded phrase; "Decode Again" button re-fills textarea and triggers new analysis; "Back" button returns to input
+- **Share as Link** — new "Share as link" button in result actions copies URL with `?example=encoded-text` to clipboard; opening the URL auto-fills the textarea with the decoded text
+- History entries now store additional data: `top_flags` (top 2 flags with type/severity), `first_decoded` (first decoded phrase), `full_message` (up to 300 chars for re-decode)
+
+### Changed
+- URL `?example=` parameter now supports both chip slugs (v7 compat) and URL-encoded full text (v8)
+- SW cache bumped to `decode-my-boss-v8.0`
+
+### Preserved
+- All v7.x features intact (PWA install, keyboard shortcut, existing URL share for examples)
+- All AI integration (OpenAI, Gemini, Anthropic) untouched
+- Share card canvas generation unchanged
+- Feedback widget unchanged
+
 ## v7.0 (2026-03-29) — PWA Install, Keyboard Shortcut & URL Share
 
 ### Added
