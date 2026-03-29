@@ -1,5 +1,18 @@
 # Decode My Boss — Changelog
 
+## v7.0 (2026-03-29) — PWA Install, Keyboard Shortcut & URL Share
+
+### Added
+- **PWA Install Prompt** — fixed bottom banner shown after 2+ visits via `beforeinstallprompt` event; "Install" triggers native prompt, "Not now" dismisses and persists choice in localStorage (`dmb_pwa_dismissed`)
+- **Keyboard Shortcut** — `Ctrl/Cmd+Enter` triggers decode when textarea is focused and button is enabled
+- **URL Share for Examples** — clicking an example chip adds `?example=slug` to URL via `replaceState`; loading page with `?example=per-my-last-email` auto-fills textarea with matching example text
+
+### Changed
+- SW cache bumped to `decode-my-boss-v7.0`
+
+### Preserved
+- All v6.x features intact (decode, draft response, tone slider, copy, examples, history, share card, feedback)
+
 ## v6.0 (2026-03-29) — Polish & Accessibility
 
 ### Added

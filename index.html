@@ -985,6 +985,52 @@ header p{
 .feedback-thanks {
   font-size: .85rem; color: var(--text-muted); margin-top: 12px;
 }
+
+/* PWA Install Banner (v7) */
+.pwa-install-banner {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, rgba(22,33,56,.95) 0%, rgba(18,28,48,.95) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(74,158,255,.15);
+  padding: 14px 24px;
+  z-index: 9999;
+  animation: slideUpBanner .4s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 -4px 20px rgba(0,0,0,.4);
+}
+.pwa-install-banner.visible { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+.pwa-install-banner-text { font-size: .85rem; color: var(--text); font-weight: 600; }
+.pwa-install-banner-text span { color: var(--text-sec); font-weight: 400; }
+.pwa-install-btn {
+  padding: 8px 20px;
+  background: var(--accent-gradient);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: .85rem;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.pwa-install-btn:hover { transform: scale(1.04); box-shadow: 0 0 16px var(--accent-glow); }
+.pwa-dismiss-btn {
+  background: none;
+  border: none;
+  color: var(--text-sec);
+  font-size: .85rem;
+  cursor: pointer;
+  padding: 8px;
+  transition: color .15s;
+}
+.pwa-dismiss-btn:hover { color: var(--text); }
+@keyframes slideUpBanner {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
 </style>
 </head>
 <body>
@@ -1116,6 +1162,13 @@ header p{
   <p class="feedback-thanks" id="feedbackThanks" style="display:none">Thanks for the feedback!</p>
 </div>
 </section>
+</div>
+
+<!-- PWA Install Banner (v7) -->
+<div class="pwa-install-banner" id="pwaInstallBanner" role="banner" aria-label="Install app">
+  <span class="pwa-install-banner-text">Install Decode My Boss <span>for offline use</span></span>
+  <button type="button" class="pwa-install-btn" id="pwaInstallBtn">Install</button>
+  <button type="button" class="pwa-dismiss-btn" id="pwaDismissBtn" aria-label="Dismiss install prompt">Not now</button>
 </div>
 
 <!-- Share preview (offscreen canvas) -->
@@ -1809,7 +1862,7 @@ copyBtn.innerHTML='&#10003; Copied!';
 setTimeout(()=>{copyBtn.classList.remove('copied');copyBtn.innerHTML=orig},2000);
 }
 
-/* ── Pre-built Examples (v4) ── */
+/* ── Pre-built Examples (v4, updated v7: URL share) ── */
 document.querySelectorAll('.example-chip').forEach(btn=>{
 btn.addEventListener('click',function(){
 const text=this.dataset.example;
@@ -1819,6 +1872,11 @@ charCount.textContent=len+' / 5000';
 charCount.classList.remove('warn','over');
 decodeBtn.disabled=len<10;
 shortWarn.classList.toggle('show',len>=10&&len<50);
+/* v7: update URL with example slug */
+const slug=this.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+const url=new URL(window.location);
+url.searchParams.set('example',slug);
+window.history.replaceState(null,'',url);
 /* auto-decode if API key is configured */
 apiKey=lsGet('dmb_key_'+currentProvider)||'';
 if(apiKey){decode()}
@@ -2007,6 +2065,72 @@ return data.content[0].text.trim();
 }catch(e){if(e.name==='AbortError')throw new Error('Request timed out (30s).');throw e}
 finally{clearTimeout(tid)}
 }
+
+/* ── v7: PWA Install Prompt ── */
+let deferredInstallPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){
+e.preventDefault();
+deferredInstallPrompt=e;
+let visitCount=parseInt(lsGet('dmb_visit_count')||'0',10);
+if(visitCount>=2&&!lsGet('dmb_pwa_dismissed')){
+const banner=$('pwaInstallBanner');
+if(banner)banner.classList.add('visible');
+}
+});
+(function(){
+let visitCount=parseInt(lsGet('dmb_visit_count')||'0',10)+1;
+lsSet('dmb_visit_count',String(visitCount));
+})();
+
+const pwaInstallBtn=$('pwaInstallBtn');
+const pwaDismissBtn=$('pwaDismissBtn');
+if(pwaInstallBtn){
+pwaInstallBtn.addEventListener('click',function(){
+if(!deferredInstallPrompt)return;
+deferredInstallPrompt.prompt();
+deferredInstallPrompt.userChoice.then(function(){
+deferredInstallPrompt=null;
+const banner=$('pwaInstallBanner');
+if(banner)banner.classList.remove('visible');
+});
+});
+}
+if(pwaDismissBtn){
+pwaDismissBtn.addEventListener('click',function(){
+lsSet('dmb_pwa_dismissed','1');
+const banner=$('pwaInstallBanner');
+if(banner)banner.classList.remove('visible');
+});
+}
+
+/* ── v7: Keyboard Shortcut — Ctrl/Cmd+Enter to Decode ── */
+document.addEventListener('keydown',function(e){
+if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){
+if(document.activeElement===msgInput&&!decodeBtn.disabled){
+e.preventDefault();
+decodeBtn.click();
+}
+}
+});
+
+/* ── v7: URL Share for Examples ── */
+(function(){
+const params=new URLSearchParams(window.location.search);
+const exParam=params.get('example');
+if(exParam){
+const chips=document.querySelectorAll('.example-chip');
+for(let i=0;i<chips.length;i++){
+const slug=chips[i].textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+if(slug===exParam){
+msgInput.value=chips[i].dataset.example;
+const len=chips[i].dataset.example.length;
+charCount.textContent=len+' / 5000';
+decodeBtn.disabled=len<10;
+break;
+}
+}
+}
+})();
 
 /* ── PWA ── */
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
