@@ -1,5 +1,22 @@
 # Decode My Boss — Changelog
 
+## v9.0 (2026-03-29) — Pre-launch Polish
+
+### Added
+- **Message Stats Bar** — real-time word count and character count displayed under the textarea; warning "Short messages may give less accurate results" shown when word count is between 1 and 9 words
+- **Share on X** — "Share on X" button in result actions opens Twitter intent URL in a new tab with tweet text: "My boss's message scored X/10 on the toxicity scale [unlock emoji] Check yours: [URL]"
+- **Export History** — "Export History" button in the history section header downloads all decode history as a formatted JSON file via Blob + URL.createObjectURL
+
+### Changed
+- Textarea input handler refactored into reusable `updateMsgStats()` function called from all text-filling paths (examples, templates, URL share, re-decode, new analysis)
+- SW cache bumped to `decode-my-boss-v9.0`
+
+### Preserved
+- All v8.x features intact (templates library, history summary cards, share as link)
+- All AI integration (OpenAI, Gemini, Anthropic) untouched
+- Share card canvas generation unchanged
+- Feedback widget unchanged
+
 ## v8.0 (2026-03-29) — Enhanced Decode Experience
 
 ### Added

@@ -339,7 +339,12 @@ header p{
 }
 .msg-textarea::placeholder{color:var(--text-muted);font-style:italic}
 
-.char-count{text-align:right;font-size:.75rem;color:var(--text-muted);margin-top:6px;font-weight:500;transition:color .3s}
+.msg-stats-bar{display:flex;align-items:center;justify-content:space-between;margin-top:6px;font-size:.75rem;color:var(--text-muted);font-weight:500}
+.msg-stats-left{display:flex;gap:12px}
+.msg-stats-left span{transition:color .3s}
+.msg-stats-warn{display:none;font-size:.73rem;color:var(--warn);margin-top:4px;animation:fadeIn .3s ease}
+.msg-stats-warn.show{display:block}
+.char-count{text-align:right;font-size:.75rem;color:var(--text-muted);font-weight:500;transition:color .3s}
 .char-count.warn{color:var(--warn)}
 .char-count.over{color:var(--danger)}
 
@@ -971,6 +976,37 @@ header p{
   color:var(--safe);
 }
 
+/* -- Share on X button (v9) -- */
+.btn-share-x{
+  padding:9px 16px;border-radius:10px;
+  font-size:.82rem;font-weight:600;
+  background:#000;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.15);
+  transition:all .3s ease;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.btn-share-x:hover{
+  background:#1a1a1a;
+  border-color:rgba(255,255,255,.3);
+  transform:translateY(-1px);
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
+}
+
+/* -- Export History button (v9) -- */
+.btn-export-history{
+  font-size:.75rem;color:var(--accent);
+  padding:5px 12px;border-radius:8px;
+  border:1px solid rgba(var(--accent-rgb),.2);
+  transition:all .3s ease;
+  font-weight:600;
+}
+.btn-export-history:hover{
+  background:rgba(var(--accent-rgb),.1);
+  border-color:rgba(var(--accent-rgb),.35);
+  transform:translateY(-1px);
+}
+
 /* -- Scrollbar styling -- */
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -1255,7 +1291,11 @@ header p{
 </select>
 </div>
 <textarea class="msg-textarea" id="msgInput" placeholder="Paste your boss's message here..." maxlength="5000" aria-label="Boss message"></textarea>
+<div class="msg-stats-bar">
+<div class="msg-stats-left"><span id="wordCount">0 words</span><span id="charCountInline">0 chars</span></div>
 <div class="char-count" id="charCount" aria-live="polite">0 / 5000</div>
+</div>
+<div class="msg-stats-warn" id="msgStatsWarn">&#9888; Short messages may give less accurate results</div>
 <div class="examples-wrap">
 <div class="examples-label">&#9889; Try an example:</div>
 <div class="examples-list" role="list">
@@ -1318,7 +1358,10 @@ header p{
 <div class="history-section" id="historySection" style="display:none">
 <div class="history-header">
 <h3>&#128337; Recent Decodes</h3>
+<div style="display:flex;gap:8px">
+<button class="btn-export-history" id="historyExport" aria-label="Export decode history as JSON">&#128229; Export History</button>
 <button class="history-clear" id="historyClear" aria-label="Clear decode history">Clear History</button>
+</div>
 </div>
 <div id="historyList" role="list" aria-label="Recent decode history"></div>
 </div>
@@ -1341,6 +1384,7 @@ header p{
 <button class="btn-copy" id="copyBtn" aria-label="Copy decoded translation">&#128203; Copy Decoded</button>
 <button class="btn-share" id="shareBtn">&#128228; Share</button>
 <button class="btn-share-link" id="shareLinkBtn">&#128279; Share as link</button>
+<button class="btn-share-x" id="shareXBtn">&#120143; Share on X</button>
 <button class="btn-new" id="newBtn">&#128196; New</button>
 </div>
 </div>
@@ -1498,16 +1542,25 @@ $('setupClose').addEventListener('click',()=>closeSetupOverlay());
 secSetup.addEventListener('click',e=>{if(e.target===secSetup)closeSetupOverlay()});
 document.addEventListener('click',e=>{if(!settingsDd.contains(e.target)&&e.target!==gearBtn)settingsDd.classList.remove('open')});
 
-/* ── Textarea ── */
-msgInput.addEventListener('input',()=>{
-const len=msgInput.value.length;
+/* ── Textarea (v9: word/char stats bar) ── */
+const wordCountEl=$('wordCount');
+const charCountInline=$('charCountInline');
+const msgStatsWarn=$('msgStatsWarn');
+function updateMsgStats(){
+const val=msgInput.value;
+const len=val.length;
+const words=val.trim()?val.trim().split(/\s+/).length:0;
 charCount.textContent=len+' / 5000';
 charCount.classList.remove('warn','over');
 if(len>4500)charCount.classList.add('over');
 else if(len>4000)charCount.classList.add('warn');
+wordCountEl.textContent=words+' word'+(words!==1?'s':'');
+charCountInline.textContent=len+' char'+(len!==1?'s':'');
+msgStatsWarn.classList.toggle('show',words>0&&words<10);
 decodeBtn.disabled=len<10;
 shortWarn.classList.toggle('show',len>=10&&len<50);
-});
+}
+msgInput.addEventListener('input',updateMsgStats);
 
 /* ── Decode ── */
 decodeBtn.addEventListener('click',decode);
@@ -1930,7 +1983,8 @@ ctx.closePath();
 
 /* ── New analysis ── */
 newBtn.addEventListener('click',()=>{
-msgInput.value='';charCount.textContent='0 / 5000';decodeBtn.disabled=true;shortWarn.classList.remove('show');
+msgInput.value='';decodeBtn.disabled=true;shortWarn.classList.remove('show');
+updateMsgStats();
 showSection('sec-input');
 });
 
@@ -2064,9 +2118,8 @@ reDecodeBtn.addEventListener('click',function(){
 const msg=this.dataset.histMsg||'';
 if(msg){
 msgInput.value=msg;
+updateMsgStats();
 const len=msg.length;
-charCount.textContent=len+' / 5000';
-decodeBtn.disabled=len<10;
 showSection('sec-input');
 if(len>=10){apiKey=lsGet('dmb_key_'+currentProvider)||'';if(apiKey)decode();}
 }
@@ -2115,11 +2168,7 @@ document.querySelectorAll('.example-chip').forEach(btn=>{
 btn.addEventListener('click',function(){
 const text=this.dataset.example;
 msgInput.value=text;
-const len=text.length;
-charCount.textContent=len+' / 5000';
-charCount.classList.remove('warn','over');
-decodeBtn.disabled=len<10;
-shortWarn.classList.toggle('show',len>=10&&len<50);
+updateMsgStats();
 /* v7: update URL with example slug */
 const slug=this.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 const url=new URL(window.location);
@@ -2314,6 +2363,29 @@ return data.content[0].text.trim();
 finally{clearTimeout(tid)}
 }
 
+/* ── v9: Share on X ── */
+const shareXBtn=$('shareXBtn');
+shareXBtn.addEventListener('click',function(){
+if(!lastResult)return;
+const score=lastResult.toxicity_score.toFixed(1);
+const url='https://magic-dev-kz.github.io/decode-my-boss/';
+const text='My boss\'s message scored '+score+'/10 on the toxicity scale \uD83D\uDD13 Check yours: '+url;
+const intentUrl='https://twitter.com/intent/tweet?text='+encodeURIComponent(text);
+window.open(intentUrl,'_blank','noopener');
+});
+
+/* ── v9: Export History ── */
+const historyExport=$('historyExport');
+historyExport.addEventListener('click',function(){
+const hist=getHistory();
+if(!hist.length)return;
+const blob=new Blob([JSON.stringify(hist,null,2)],{type:'application/json'});
+const url=URL.createObjectURL(blob);
+const a=document.createElement('a');
+a.href=url;a.download='decode-my-boss-history.json';a.click();
+setTimeout(()=>URL.revokeObjectURL(url),5000);
+});
+
 /* ── v7: PWA Install Prompt ── */
 let deferredInstallPrompt=null;
 window.addEventListener('beforeinstallprompt',function(e){
@@ -2373,11 +2445,7 @@ document.querySelectorAll('.template-chip').forEach(btn=>{
 btn.addEventListener('click',function(){
 const text=this.dataset.tmpl;
 msgInput.value=text;
-const len=text.length;
-charCount.textContent=len+' / 5000';
-charCount.classList.remove('warn','over');
-decodeBtn.disabled=len<10;
-shortWarn.classList.toggle('show',len>=10&&len<50);
+updateMsgStats();
 msgInput.focus();
 /* auto-decode if API key is configured */
 apiKey=lsGet('dmb_key_'+currentProvider)||'';
@@ -2422,9 +2490,7 @@ for(let i=0;i<chips.length;i++){
 const slug=chips[i].textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 if(slug===exParam){
 msgInput.value=chips[i].dataset.example;
-const len=chips[i].dataset.example.length;
-charCount.textContent=len+' / 5000';
-decodeBtn.disabled=len<10;
+updateMsgStats();
 matched=true;
 break;
 }
@@ -2435,8 +2501,7 @@ try{
 const decoded=decodeURIComponent(exParam);
 if(decoded.length>=10){
 msgInput.value=decoded;
-charCount.textContent=decoded.length+' / 5000';
-decodeBtn.disabled=false;
+updateMsgStats();
 }
 }catch(e){}
 }
