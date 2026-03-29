@@ -2,7 +2,9 @@
 
 **What they say vs what they mean.**
 
-Paste a message from your boss — get the real meaning, red flags, toxicity score, and an actionable playbook. AI-powered corporate message decoder.
+Paste a message from your boss — get the real meaning, red flags, toxicity score, and an actionable playbook. Plus: AI drafts your response. Free, no account needed.
+
+**[Try it free →](https://magic-dev-kz.github.io/decode-my-boss/)**
 
 ---
 
@@ -12,7 +14,10 @@ Paste a message from your boss — get the real meaning, red flags, toxicity sco
 - **Red Flags** — Detects patterns: passive aggression, gaslighting, blame shifting, weaponized positivity, and more
 - **Toxicity Score (1-10)** — Gradient bar with 5-category breakdown
 - **Playbook** — 2-3 specific, actionable steps for what to do next
+- **✍️ Draft Response** — AI writes your reply, with tone control from Diplomatic to Direct
+- **Quick Examples** — click "Per my last email" or "Let's take this offline" to try instantly
 - **Share Card** — PNG card with score + flags (original text NOT included — privacy first)
+- **Feedback Widget** — tell us if the decode was helpful
 - **BYOK** (Bring Your Own Key) — works with OpenAI, Google Gemini, or Anthropic
 - **Single HTML file** — no backend, no account, no tracking
 
