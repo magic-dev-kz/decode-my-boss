@@ -1,5 +1,27 @@
 # Decode My Boss — Changelog
 
+## v13.0 (2026-03-29) — Quick Replies
+
+Feature update by Mario.
+
+### Response Templates
+- After drafting a response, 3 quick-reply chips appear: Diplomatic, Neutral, Assertive
+- Each chip generates a pre-filled professional reply template matching the selected tone
+- Click any chip to copy the template to clipboard instantly
+- Templates are language-aware: detects Russian input and generates Russian response templates
+- Visual "Copied!" feedback with accent color highlight on the chip
+- Styled as compact pill buttons below the draft response section
+
+### Service Worker
+- Cache version bumped to `decode-my-boss-v13.0`
+
+### Preserved
+- All v12.x features intact (drafted responses history, quick copy decoded, toxicity trend sparkline)
+- All AI integration (OpenAI, Gemini, Anthropic) untouched
+- Share card canvas generation unchanged
+
+---
+
 ## v12.0 (2026-03-29) — Power Features
 
 ### Added

@@ -1099,6 +1099,30 @@ header p{
   white-space:pre-wrap;
 }
 .draft-actions{display:flex;gap:8px;margin-top:14px}
+/* v13: Response Templates */
+.response-templates{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)}
+.response-templates__label{font-size:.72rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-muted);margin-bottom:8px;font-weight:600}
+.response-templates__chips{display:flex;gap:8px;flex-wrap:wrap}
+.response-template-chip{
+  padding:8px 14px;border-radius:10px;
+  font-size:.8rem;font-weight:600;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  color:var(--text-muted);
+  cursor:pointer;transition:all .25s ease;
+  display:flex;align-items:center;gap:5px;
+}
+.response-template-chip:hover{
+  background:rgba(124,92,252,.12);
+  border-color:rgba(124,92,252,.3);
+  color:var(--text);
+  transform:translateY(-2px);
+  box-shadow:0 4px 16px rgba(124,92,252,.15);
+}
+.response-template-chip:active{transform:translateY(0)}
+.response-template-chip.copied{
+  background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3);color:#22c55e;
+}
 .btn-copy-draft{
   padding:9px 16px;border-radius:10px;
   font-size:.82rem;font-weight:600;
@@ -2512,7 +2536,16 @@ html+='<h3><span class="ico">&#9997;&#65039;</span> Suggested Response</h3>';
 html+='<div class="draft-text">'+escapeHtml(response)+'</div>';
 html+='<div class="draft-actions">';
 html+='<button class="btn-copy-draft" id="copyDraftBtn">&#128203; Copy Response</button>';
+html+='</div>';
+/* v13: Response Templates */
+html+='<div class="response-templates">';
+html+='<div class="response-templates__label">Quick-reply templates</div>';
+html+='<div class="response-templates__chips">';
+html+='<button class="response-template-chip" data-tone="diplomatic">&#128140; Diplomatic</button>';
+html+='<button class="response-template-chip" data-tone="neutral">&#9878;&#65039; Neutral</button>';
+html+='<button class="response-template-chip" data-tone="assertive">&#128170; Assertive</button>';
 html+='</div></div>';
+html+='</div>';
 draftResult.innerHTML=html;
 draftResult.style.display='block';
 /* v12: Save drafted response */
@@ -2523,6 +2556,16 @@ if(!lastDraftText)return;
 if(navigator.clipboard&&navigator.clipboard.writeText){
 navigator.clipboard.writeText(lastDraftText).then(()=>showDraftCopied()).catch(()=>fallbackCopyDraft(lastDraftText));
 }else{fallbackCopyDraft(lastDraftText)}
+});
+/* v13: Response Template chips */
+document.querySelectorAll('.response-template-chip').forEach(function(chip){
+chip.addEventListener('click',function(){
+var tone=chip.getAttribute('data-tone');
+var tpl=generateTemplate(tone,lastResult,lastOriginalMsg);
+if(navigator.clipboard&&navigator.clipboard.writeText){
+navigator.clipboard.writeText(tpl).then(function(){showChipCopied(chip)}).catch(function(){fallbackCopyText(tpl);showChipCopied(chip)});
+}else{fallbackCopyText(tpl);showChipCopied(chip)}
+});
 });
 }catch(err){
 let errMsg=err.message||'Failed to generate draft response.';
@@ -2548,6 +2591,41 @@ btn.classList.add('copied');
 const orig=btn.innerHTML;
 btn.innerHTML='&#10003; Copied!';
 setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML=orig},2000);
+}
+
+/* v13: Response template generator */
+function generateTemplate(tone,result,originalMsg){
+var score=result?result.toxicity_score:5;
+var isRu=/[а-яА-ЯёЁ]/.test(originalMsg||'');
+if(tone==='diplomatic'){
+return isRu
+?'Спасибо за обратную связь. Я ценю ваш вклад и хотел(а) бы обсудить это подробнее, чтобы мы нашли лучшее решение для всех.'
+:'Thank you for your feedback. I appreciate your input and would love to discuss this further to find the best path forward for everyone.';
+}
+if(tone==='neutral'){
+return isRu
+?'Понял(а), спасибо. Давайте назначим время для обсуждения деталей и определим следующие шаги.'
+:'Understood, thank you. Let\'s schedule a time to discuss the details and determine next steps.';
+}
+if(tone==='assertive'){
+return isRu
+?'Спасибо за сообщение. Я хотел(а) бы прояснить свою позицию и обсудить конкретные ожидания, чтобы мы были на одной волне.'
+:'Thanks for reaching out. I\'d like to clarify my position and discuss specific expectations so we\'re aligned moving forward.';
+}
+return '';
+}
+function showChipCopied(chip){
+chip.classList.add('copied');
+var orig=chip.innerHTML;
+chip.innerHTML='&#10003; Copied!';
+setTimeout(function(){chip.classList.remove('copied');chip.innerHTML=orig},1500);
+}
+function fallbackCopyText(text){
+var ta=document.createElement('textarea');
+ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';
+document.body.appendChild(ta);ta.select();
+try{document.execCommand('copy')}catch(e){}
+document.body.removeChild(ta);
 }
 
 async function callAIDraft(prompt){
