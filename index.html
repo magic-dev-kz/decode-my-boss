@@ -1233,6 +1233,93 @@ header p{
   from { transform: translateY(100%); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+/* -- Welcome Banner (v10 onboarding) -- */
+.welcome-banner{
+  background:var(--glass-bg);
+  backdrop-filter:blur(var(--glass-blur));
+  -webkit-backdrop-filter:blur(var(--glass-blur));
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius);
+  padding:22px 24px;
+  margin-top:14px;
+  box-shadow:var(--shadow-lg);
+  animation:fadeInUp .5s ease;
+  position:relative;overflow:hidden;
+}
+.welcome-banner::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:2px;
+  background:var(--accent-gradient);
+  opacity:.6;
+}
+.welcome-banner h3{
+  font-size:.95rem;font-weight:700;color:var(--accent);
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+.welcome-steps{display:flex;gap:12px;flex-wrap:wrap}
+.welcome-step{
+  flex:1;min-width:130px;
+  padding:14px;
+  background:rgba(0,0,0,.2);
+  border-radius:10px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.06);
+  transition:all .3s ease;
+}
+.welcome-step:hover{
+  border-color:rgba(var(--accent-rgb),.2);
+  background:rgba(var(--accent-rgb),.05);
+  transform:translateY(-2px);
+}
+.welcome-step-num{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--accent-gradient);
+  color:#000;font-weight:800;font-size:.8rem;
+  display:inline-flex;align-items:center;justify-content:center;
+  margin-bottom:8px;
+  box-shadow:0 2px 10px rgba(var(--accent-rgb),.25);
+}
+.welcome-step-title{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:4px}
+.welcome-step-desc{font-size:.75rem;color:var(--text-muted);line-height:1.4}
+.welcome-dismiss{
+  position:absolute;top:10px;right:12px;
+  background:none;border:none;color:var(--text-muted);font-size:1.1rem;
+  cursor:pointer;padding:4px 8px;border-radius:6px;transition:color .2s;
+}
+.welcome-dismiss:hover{color:var(--text)}
+
+/* -- Draft Response glow (v10) -- */
+@keyframes draftGlow{
+  0%,100%{box-shadow:0 4px 20px rgba(124,92,252,.3),0 0 30px rgba(124,92,252,.1)}
+  50%{box-shadow:0 4px 20px rgba(124,92,252,.5),0 0 50px rgba(124,92,252,.25)}
+}
+.draft-btn{
+  animation:draftGlow 3s ease infinite;
+  background:linear-gradient(135deg,#7c5cfc 0%,#a855f7 40%,#c084fc 100%);
+  background-size:200% 200%;
+}
+.draft-btn:not(:disabled){
+  animation:draftGlow 3s ease infinite,gradientShift 4s ease infinite;
+}
+.draft-btn-wrap{position:relative;display:inline-block;width:100%}
+.draft-tooltip{
+  display:none;position:absolute;bottom:calc(100% + 8px);left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,.85);
+  color:var(--text);font-size:.75rem;font-weight:500;
+  padding:6px 12px;border-radius:8px;
+  white-space:nowrap;pointer-events:none;
+  box-shadow:var(--shadow-md);
+  z-index:10;
+  animation:fadeIn .2s ease;
+}
+.draft-tooltip::after{
+  content:'';position:absolute;top:100%;left:50%;
+  transform:translateX(-50%);
+  border:5px solid transparent;
+  border-top-color:rgba(0,0,0,.85);
+}
+.draft-btn-wrap:hover .draft-tooltip{display:block}
 </style>
 </head>
 <body>
@@ -1256,8 +1343,8 @@ header p{
 <h2>&#128274; Setup Your API Key</h2>
 <p style="font-size:.84rem;color:var(--text-sec);margin-bottom:16px">Your key stays in your browser. Nothing is sent to our servers.</p>
 <div class="provider-tabs" role="tablist">
-<button role="tab" class="active" data-prov="openai" aria-selected="true" tabindex="0">OpenAI</button>
-<button role="tab" data-prov="google" aria-selected="false" tabindex="-1">Gemini</button>
+<button role="tab" data-prov="openai" aria-selected="false" tabindex="-1">OpenAI</button>
+<button role="tab" class="active" data-prov="google" aria-selected="true" tabindex="0">Gemini</button>
 <button role="tab" data-prov="anthropic" aria-selected="false" tabindex="-1">Anthropic</button>
 </div>
 <div class="key-input-wrap">
@@ -1278,6 +1365,27 @@ header p{
 
 <!-- INPUT -->
 <section class="section active" id="sec-input" tabindex="-1" aria-label="Message Input">
+<div class="welcome-banner" id="welcomeBanner" style="display:none">
+<button class="welcome-dismiss" id="welcomeDismiss" aria-label="Close">&times;</button>
+<h3>&#128075; How It Works</h3>
+<div class="welcome-steps">
+<div class="welcome-step">
+<div class="welcome-step-num">1</div>
+<div class="welcome-step-title">Get a Free Key</div>
+<div class="welcome-step-desc">Grab a free Gemini API key from Google AI Studio</div>
+</div>
+<div class="welcome-step">
+<div class="welcome-step-num">2</div>
+<div class="welcome-step-title">Paste Message</div>
+<div class="welcome-step-desc">Drop your boss's email, Slack, or Teams message</div>
+</div>
+<div class="welcome-step">
+<div class="welcome-step-num">3</div>
+<div class="welcome-step-title">See Decoded</div>
+<div class="welcome-step-desc">Get the real meaning, red flags, toxicity score &amp; playbook</div>
+</div>
+</div>
+</div>
 <div class="input-card">
 <div class="context-row">
 <label for="contextSel">&#128196; Context:</label>
@@ -1390,7 +1498,10 @@ header p{
 </div>
 <div id="resultContent" aria-live="polite"></div>
 <div class="draft-section" id="draftSection">
+<div class="draft-btn-wrap">
+<span class="draft-tooltip">AI writes your reply — choose your tone</span>
 <button class="draft-btn" id="draftBtn">&#9997;&#65039; Draft a Response</button>
+</div>
 <div id="draftLoading" style="display:none" class="draft-loading">
 <div class="draft-loading-text">Crafting your response...</div>
 <div class="draft-loading-bar"></div>
@@ -1432,7 +1543,7 @@ function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function lsRemove(k){try{localStorage.removeItem(k)}catch(e){}}
 
 /* ── State ── */
-let currentProvider='openai';
+let currentProvider='google';
 let apiKey='';
 let lastResult=null;
 let lastOriginalMsg='';
@@ -2506,6 +2617,20 @@ updateMsgStats();
 }catch(e){}
 }
 }
+})();
+
+/* ── v10: Welcome Banner (first visit onboarding) ── */
+(function(){
+const banner=$('welcomeBanner');
+const dismissBtn=$('welcomeDismiss');
+if(!banner||!dismissBtn)return;
+if(!lsGet('dmb_welcome_dismissed')){
+banner.style.display='block';
+}
+dismissBtn.addEventListener('click',function(){
+banner.style.display='none';
+lsSet('dmb_welcome_dismissed','1');
+});
 })();
 
 /* ── PWA ── */

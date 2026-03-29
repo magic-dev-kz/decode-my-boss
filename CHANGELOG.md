@@ -1,5 +1,23 @@
 # Decode My Boss — Changelog
 
+## v10.0 (2026-03-29) — Micro-improvements
+
+### Changed
+- **Gemini as default provider** — Google Gemini (free tier) pre-selected as default provider instead of OpenAI; reduces friction for new users who can get a free API key from Google AI Studio
+- **Draft Response more prominent** — Draft a Response button now has animated gradient glow (`draftGlow` keyframes) and gradient background shift; tooltip "AI writes your reply — choose your tone" shown on hover via `.draft-btn-wrap` wrapper
+
+### Added
+- **"How it works" welcome banner** — first-visit onboarding banner with 3 steps: "Get a Free Key", "Paste Message", "See Decoded"; dismissible via close button; state persisted in localStorage (`dmb_welcome_dismissed`); not shown on repeat visits
+
+### Changed
+- SW cache bumped to `decode-my-boss-v10.0`
+
+### Preserved
+- All v9.x features intact (message stats bar, share on X, export history)
+- All AI integration (OpenAI, Gemini, Anthropic) untouched
+- Share card canvas generation unchanged
+- Feedback widget unchanged
+
 ## v9.0 (2026-03-29) — Pre-launch Polish
 
 ### Added
