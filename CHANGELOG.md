@@ -1,5 +1,17 @@
 # Decode My Boss — Changelog
 
+## v11.0 (2026-03-29) — Micro-improvements
+
+### Changed
+- **Welcome banner animated gradient border** — banner now has a continuously shifting gradient border (blue-purple-lavender) via `::after` pseudo-element with `welcomeBorderShift` keyframes cycling at 4s
+- **Template chips stronger hover lift** — hover translateY increased from -1px to -3px with scale(1.03); shadow deepened to 8px/20px spread for more tactile feel
+- SW cache bumped to `decode-my-boss-v11.0`
+
+### Preserved
+- All v10.x features intact (Gemini default, draft response glow, welcome banner steps)
+
+---
+
 ## v10.0 (2026-03-29) — Micro-improvements
 
 ### Changed

@@ -854,11 +854,11 @@ header p{
   cursor:pointer;text-align:left;
 }
 .template-chip:hover{
-  background:rgba(var(--accent-rgb),.1);
+  background:rgba(var(--accent-rgb),.12);
   color:var(--text);
-  border-color:rgba(var(--accent-rgb),.3);
-  transform:translateY(-1px);
-  box-shadow:0 4px 12px rgba(var(--accent-rgb),.12);
+  border-color:rgba(var(--accent-rgb),.35);
+  transform:translateY(-3px) scale(1.03);
+  box-shadow:0 8px 20px rgba(var(--accent-rgb),.18);
 }
 .template-chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .template-chip.cat-passive{border-color:rgba(239,68,68,.15)}
@@ -1238,19 +1238,34 @@ header p{
   background:var(--glass-bg);
   backdrop-filter:blur(var(--glass-blur));
   -webkit-backdrop-filter:blur(var(--glass-blur));
-  border:1px solid var(--glass-border);
+  border:1px solid transparent;
   border-radius:var(--radius);
   padding:22px 24px;
   margin-top:14px;
   box-shadow:var(--shadow-lg);
   animation:fadeInUp .5s ease;
   position:relative;overflow:hidden;
+  background-clip:padding-box;
+}
+/* v11: animated gradient border */
+.welcome-banner::after{
+  content:'';position:absolute;inset:-2px;
+  border-radius:calc(var(--radius) + 2px);
+  background:linear-gradient(135deg,#4a9eff,#7c5cfc,#c084fc,#4a9eff);
+  background-size:300% 300%;
+  animation:welcomeBorderShift 4s ease infinite;
+  z-index:-1;
+}
+@keyframes welcomeBorderShift{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 .welcome-banner::before{
   content:'';position:absolute;top:0;left:0;right:0;
   height:2px;
   background:var(--accent-gradient);
-  opacity:.6;
+  opacity:.6;z-index:1;
 }
 .welcome-banner h3{
   font-size:.95rem;font-weight:700;color:var(--accent);
