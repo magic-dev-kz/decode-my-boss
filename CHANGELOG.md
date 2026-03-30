@@ -1,5 +1,12 @@
 # Decode My Boss — Changelog
 
+
+## v23.0 (2026-03-29) — Deferred Font Loading
+
+- **Non-blocking Google Fonts**: Both Inter and JetBrains Mono font CSS changed from render-blocking `<link rel="stylesheet">` to `<link rel="preload" ... onload>` with `<noscript>` fallback — improves First Contentful Paint
+- SW cache bumped to `decode-my-boss-v23.0`
+
+---
 ## v22.0 (2026-03-29) — Data Portability
 
 - **Export history + drafted responses as JSON**: Existing "Export History" button now exports both decode history and all drafted responses in a single JSON backup file with app metadata (version, export date)
