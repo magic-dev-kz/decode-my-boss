@@ -1,5 +1,10 @@
 # Decode My Boss — Changelog
 
+## v19.0 (2026-03-29) — Error Handling Hardening
+
+- **Timeout indicator**: "Taking longer than expected..." message after 20s of waiting
+- SW cache bumped to `decode-my-boss-v19.0`
+
 ## v18.0 (2026-03-29) — SEO / Meta Pass
 
 - **robots meta**: Added `<meta name="robots" content="index, follow">`

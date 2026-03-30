@@ -1,5 +1,5 @@
 /* Service Worker — Decode My Boss — cache-first */
-const CACHE_NAME = 'decode-my-boss-v18.0';
+const CACHE_NAME = 'decode-my-boss-v19.0';
 const ASSETS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', e => {

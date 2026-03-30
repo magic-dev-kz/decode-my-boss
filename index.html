@@ -1842,6 +1842,11 @@ hideFeedbackWidget();
 startDecryptAnim();
 startLoadBar();
 shareBtn.disabled=true;
+// v19: Timeout indicator after 20s
+var slowTimer=setTimeout(function(){
+var sub=document.querySelector('#sec-loading .loading-sub');
+if(sub)sub.textContent='Taking longer than expected\u2026 hang tight!';
+},20000);
 try{
 const result=await callAI(msg,ctx);
 lastResult=result;
@@ -1868,6 +1873,10 @@ errMsg='Error type: '+err.type+(err.status?' (HTTP '+err.status+')':'');
 if(errMsg==='Unknown error')errMsg+='. Check your API key and internet connection.';
 const ie=$('inlineError');ie.textContent=errMsg;ie.style.display='block';
 }finally{
+clearTimeout(slowTimer);
+// v19: Reset loading subtitle
+var sub=document.querySelector('#sec-loading .loading-sub');
+if(sub)sub.textContent='Analyzing corporate subtext...';
 stopDecryptAnim();
 stopLoadBar();
 shareBtn.disabled=false;
