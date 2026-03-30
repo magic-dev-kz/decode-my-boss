@@ -1,5 +1,10 @@
 # Decode My Boss — Changelog
 
+## v20.0 (2026-03-29) — Print Styles
+
+- **Print stylesheet**: `@media print` rules — hides setup, input, settings, buttons; shows decoded translation + flags + playbook; white bg, black text; page breaks on result blocks
+- SW cache bumped to `decode-my-boss-v20.0`
+
 ## v19.0 (2026-03-29) — Error Handling Hardening
 
 - **Timeout indicator**: "Taking longer than expected..." message after 20s of waiting
