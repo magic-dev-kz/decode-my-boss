@@ -1,5 +1,15 @@
 # Decode My Boss — Changelog
 
+## v22.0 (2026-03-29) — Data Portability
+
+- **Export history + drafted responses as JSON**: Existing "Export History" button now exports both decode history and all drafted responses in a single JSON backup file with app metadata (version, export date)
+- SW cache bumped to `decode-my-boss-v22.0`
+
+## v21.0 (2026-03-29) — Response Tone Preview
+
+- **Response tone preview**: Below the tone slider, a sample sentence preview shows what the selected tone will sound like ("Your reply will sound like: ..."); updates live on slider change; one example per tone level (Very Diplomatic through Very Direct)
+- SW cache bumped to `decode-my-boss-v21.0`
+
 ## v20.0 (2026-03-29) — Print Styles
 
 - **Print stylesheet**: `@media print` rules — hides setup, input, settings, buttons; shows decoded translation + flags + playbook; white bg, black text; page breaks on result blocks

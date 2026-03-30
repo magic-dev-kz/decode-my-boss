@@ -2563,10 +2563,29 @@ document.addEventListener('click',function(e){
 const toneSlider=$('toneSlider');
 const toneValue=$('toneValue');
 const toneLabels={1:'Very Diplomatic',2:'Diplomatic',3:'Neutral',4:'Direct',5:'Very Direct'};
-toneSlider.addEventListener('input',()=>{
-toneValue.textContent=toneLabels[toneSlider.value]||'Neutral';
-toneSlider.setAttribute('aria-valuetext',toneLabels[toneSlider.value]||'Neutral');
-});
+// v21: Tone preview samples — show example sentence per tone level
+const tonePreviews={
+1:'\"Thank you for sharing your perspective. I\'d like to discuss this further at your convenience.\"',
+2:'\"I appreciate your input. Let me share my thoughts on a few of these points.\"',
+3:'\"I understand your points. Here\'s how I see the situation.\"',
+4:'\"I need to address a few things in your message directly.\"',
+5:'\"Let me be straightforward about where I stand on this.\"\u200B'
+};
+var tonePreviewEl=document.getElementById('tonePreview');
+if(!tonePreviewEl){
+tonePreviewEl=document.createElement('div');
+tonePreviewEl.id='tonePreview';
+tonePreviewEl.style.cssText='font-size:.78rem;color:var(--text-secondary,#8b929a);font-style:italic;margin-top:6px;padding:6px 10px;border-left:2px solid var(--accent,#4a9eff);border-radius:0 6px 6px 0;background:rgba(74,158,255,.04);transition:all .3s ease;line-height:1.5;';
+toneSlider.parentNode.insertBefore(tonePreviewEl,toneSlider.nextSibling);
+}
+function updateTonePreview(){
+var label=toneLabels[toneSlider.value]||'Neutral';
+toneValue.textContent=label;
+toneSlider.setAttribute('aria-valuetext',label);
+tonePreviewEl.innerHTML='<span style="color:var(--text-muted,#6b7280);font-style:normal">Your reply will sound like:</span> '+tonePreviews[toneSlider.value];
+}
+toneSlider.addEventListener('input',updateTonePreview);
+updateTonePreview();
 
 /* ── Draft Response (v5) ── */
 const draftBtn=$('draftBtn');
@@ -2777,15 +2796,17 @@ const intentUrl='https://twitter.com/intent/tweet?text='+encodeURIComponent(text
 window.open(intentUrl,'_blank','noopener');
 });
 
-/* ── v9: Export History ── */
+/* ── v9/v22: Export History + Drafted Responses as JSON backup ── */
 const historyExport=$('historyExport');
 historyExport.addEventListener('click',function(){
 const hist=getHistory();
-if(!hist.length)return;
-const blob=new Blob([JSON.stringify(hist,null,2)],{type:'application/json'});
+const drafts=(function(){try{const raw=lsGet('dmb_drafted_responses');if(!raw)return[];const d=JSON.parse(raw);return Array.isArray(d)?d:[]}catch(e){return[]}})();
+if(!hist.length&&!drafts.length)return;
+const data={app:'Decode My Boss',version:'22.0',exported:new Date().toISOString(),history:hist,draftedResponses:drafts};
+const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
 const url=URL.createObjectURL(blob);
 const a=document.createElement('a');
-a.href=url;a.download='decode-my-boss-history.json';a.click();
+a.href=url;a.download='decode-my-boss-backup.json';a.click();
 setTimeout(()=>URL.revokeObjectURL(url),5000);
 });
 
