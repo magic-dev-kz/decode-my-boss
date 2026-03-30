@@ -2467,7 +2467,9 @@ lsRemove(HISTORY_KEY);
 renderHistory();
 });
 
-renderHistory();
+// v26: Defer initial history rendering to not block first paint
+if('requestIdleCallback' in window){requestIdleCallback(function(){renderHistory()});}
+else{setTimeout(function(){renderHistory()},100);}
 
 /* ── Copy Decoded (v4, v16: copy entire formatted result) ── */
 copyBtn.addEventListener('click',function(){
@@ -3097,10 +3099,13 @@ ctx2.fill();
 }
 }
 
-renderToxTrend();
+// v26: Defer trend chart and SW registration to not block first paint
+if('requestIdleCallback' in window){requestIdleCallback(function(){renderToxTrend()});}
+else{setTimeout(function(){renderToxTrend()},100);}
 
 /* ── PWA ── */
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+if('requestIdleCallback' in window){requestIdleCallback(function(){if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){});}});}
+else{setTimeout(function(){if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){});}},100);}
 
 })();
 </script>
